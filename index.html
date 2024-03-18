@@ -5,73 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather Application</title>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-    #background-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      min-width: 100%;
-      min-height: 100%;
-      z-index: -1;
-    }
-    .container {
-      margin-top: 50px;
-    }
-    .card {
-      background-color: rgba(255, 255, 255, 0.7);
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
-    .card-header {
-      background-color: #007bff;
-      color: #fff;
-      border-radius: 10px 10px 0 0;
-    }
-    .card-body {
-      text-align: center;
-    }
-    .weather-icon {
-      width: 100px;
-      height: 100px;
-      margin: auto;
-    }
-    .forecast-card {
-      padding: 20px;
-    }
-    #current-time {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      color: #fff;
-      font-size: 18px;
-    }
-    #current-time {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      color: #fff;
-      font-size: 24px;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 5px 10px;
-      border-radius: 5px;
-    }
-    #current-time-card {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      background-color: rgba(255, 255, 255, 0.7);
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      padding: 10px;
-    }
-  </style>
+  <link rel="icon" href="images/disaster.png" type="image/x-icon">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="style.css">  
+
 </head>
 <body>
   <div id="current-time"></div>
@@ -128,79 +65,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-  <script>
-    $(document).ready(function() {
-    setInterval(updateTime, 1000);
-  
-    function updateTime() {
-      let now = new Date();
-      let timeString = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', second: '2-digit'});
-      $('#current-time').text(timeString);
-    }
-  
-    $('#weather-form').submit(function(event) {
-      event.preventDefault();
-      let searchQuery = $('#search').val();
-      fetchWeather(searchQuery);
-    });
-  
-    function fetchWeather(city) {
-      fetch(`https://api.weatherapi.com/v1/forecast.json?key=fc2ec1424b5e41068c813428242502&q=${city}&days=5`)
-      .then(response => response.json())
-      .then(data => {
-        $('#weather-icon').attr('src', data.current.condition.icon);
-        $('#temperature').text(`${data.current.temp_c} °C`);
-        $('#condition').text(data.current.condition.text);
-        $('#location').text(`${data.location.name}, ${data.location.country}`);
-        $('#humidity').text(`Humidity: ${data.current.humidity}%`);
-        $('#weather-info').show();
-        updateBackground(data.current.condition.text.toLowerCase());
-        updateForecast(data.forecast.forecastday.slice(-3));
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again.');
-      });
-    }
-  
-    function updateBackground(condition) {
-      let backgroundVideos = {
-        'clear': 'videos/clear.mp4',
-        'partly cloudy': 'videos/partly_cloudy.mp4',
-        'cloudy': 'videos/cloudy.mp4',
-        'rain': 'videos/rain.mp4',
-        'sunny':'videos/sunny.mp4',
-        'patchy rain nearby':'patchy_rain_nearby.mp4',
-        'moon':'moon.mp4',
-
-      };
-      $('#background-video source').attr('src', backgroundVideos[condition] || '');
-      $('#background-video')[0].load();
-    }
-  
-    function updateForecast(forecastItems) {
-      let forecastContainer = $('#forecast-container');
-      forecastContainer.empty();
-      forecastItems.forEach(item => {
-        let date = item.date;
-        let iconUrl = item.day.condition.icon;
-        let maxTemp = item.day.maxtemp_c;
-        let minTemp = item.day.mintemp_c;
-        let condition = item.day.condition.text;
-        let forecastCard = `
-          <div class="col-md-2 forecast-card">
-            <h5>${date}</h5>
-            <img src="${iconUrl}" alt="Weather Icon" class="weather-icon">
-            <p>${condition}</p>
-            <p>Max: ${maxTemp}°C</p>
-            <p>Min: ${minTemp}°C</p>
-          </div>
-        `;
-        forecastContainer.append(forecastCard);
-      });
-    }
-  });
-  </script>
+  <script src="./scripts/script.js"></script>
 </body>
 </html>
 
